@@ -84,26 +84,23 @@ public class Hermite {
     // Just like the three dimensional version of the "vector at step" method above, this combines two 2D Hermite curves
     // to build up the 3D curve to display.
     //==============
-    public static void DrawVector3(Vector3 p1, Vector3 p2, Vector3 t1, Vector3 t2, float stepLength)
+    public static void DrawVector3(Vector3 p1, Vector3 p2, Vector3 t1, Vector3 t2, int segments)
     {
-        Vector2 prevPoint;                                        // Start point of segment
-        Vector2 nextPoint;                                        // End point of segment
+        Vector3 prevPoint;                                        // Start point of segment
+        Vector3 nextPoint;                                        // End point of segment
         Color[] colors = new Color[2] {Color.white, Color.red};   // Colors array for display purposes
         int colorCounter = 0;                                     // Counter for looping through Colors array
+        float stepLength;
+        float step;
 
-        for (float i = stepLength; i <= 1; i += stepLength)
+        for (int i = 0; i < segments; i++)
         {
-            if (stepLength > 0)
-            {
-                prevPoint = GetVector3AtStep(p1, p2, t1, t2, i - stepLength);
-                nextPoint = GetVector3AtStep(p1, p2, t1, t2, i);
-                Debug.DrawLine(prevPoint, nextPoint, colors[colorCounter % colors.Length]);
-                colorCounter++;
-            }
-            else
-            {
-                Debug.Log("stepLength must be greater than 0 and less than or equal to 1");
-            }
+            stepLength = 1.0f / segments;
+            step = i * stepLength;
+            prevPoint = GetVector3AtStep(p1, p2, t1, t2, step);
+            nextPoint = GetVector3AtStep(p1, p2, t1, t2, step + stepLength);
+            Debug.DrawLine(prevPoint, nextPoint, colors[colorCounter % colors.Length]);
+            colorCounter++;
         }
     }
 }
